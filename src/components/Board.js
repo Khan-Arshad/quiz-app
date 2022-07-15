@@ -3,14 +3,17 @@ import Difficulty from "./Difficulty";
 import Confirmation from "./Confirmation";
 import Display from "./Display";
 import Category from "./Category";
+import Score from "./Score";
 
 const Questions = () => {
   const [question, setQuestion] = useState([]);
-  const [loading, setLoading] = useState([true]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [start, setStart] = useState(false);
+  const [response, setResponse] = useState(0);
 
   const [difficulty, setDifficulty] = useState("easy");
-  const [category, setCategory] = useState("10");
+  const [category, setCategory] = useState("9");
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [showScore, setShowScore] = useState(false);
@@ -26,8 +29,10 @@ const Questions = () => {
 
   //   Fetch Data
   const getQuestions = () => {
+    console.log(questionsUrl);
     fetch(questionsUrl)
       .then((response) => {
+        console.log(response);
         if (response.ok) {
           return response.json();
         }
@@ -35,6 +40,7 @@ const Questions = () => {
       })
       .then((data) => {
         setQuestion(data);
+        setResponse(data.response_code);
         console.log(data);
       })
       .catch((error) => {
@@ -52,6 +58,7 @@ const Questions = () => {
     setCurrentQuestion(0);
     setScore(0);
     setConfirm(null);
+    setStart(true);
   };
 
   //   Handle Answer
@@ -73,33 +80,50 @@ const Questions = () => {
       setShowScore(true);
     }
   };
-     
-  return (
-    <div className="board">
 
-      <Category setCategory={setCategory} />
+  const quizSelector = (showScore) ?
+      <div>
+        <Category setCategory={setCategory} />
       <Difficulty
       setDifficulty={setDifficulty}
       difficulty={difficulty}
       getNewQuestions={getNewQuestions}
       />
+      </div> : <></>;
+
+const displayScore = (showScore && score > 0) ?  <Score score={score} totalScore={totalScore} /> : <></>;
+  
+
+  const startQuiz = (start) ?
+  <Display
+      question={question}
+      setQuestion={setQuestion}
+      loading={loading}
+      setLoading={setLoading}
+      error={error}
+      handleAnswerOptionClick={handleAnswerOptionClick}
+      getNewQuestions={getNewQuestions}
+      setShowScore={setShowScore}
+      currentQuestion={currentQuestion}
+      response={response}
+      setResponse={setResponse}
+      setStart={setStart}
+      />
+      : (showScore ? <></> : <button onClick={() => {setShowScore(true)}}>Start Quiz</button>);
+
+     
+  return (
+    <div className="board">
+
+      {displayScore}
+
+      {quizSelector}
       
       <div className="question-section">      
 
       <Confirmation confirm={confirm}/>
 
-      <Display
-      question={question}
-      loading={loading}
-      error={error}
-      handleAnswerOptionClick={handleAnswerOptionClick}
-      getNewQuestions={getNewQuestions}
-      showScore={showScore}
-      score={score}
-      totalScore={totalScore}
-      currentQuestion={currentQuestion}
-      responseCode={question.response_code}
-      />
+      {startQuiz}
 
     </div>
     </div>

@@ -1,11 +1,11 @@
 import React from "react";
-import Questions from "./components/questions";
+import Board from "./components/Board";
 
 export default function App() {
   return (
     <div className="app">
       <h1>Quiz App</h1>
-      <Questions />
+      <Board />
     </div>
   );
 }
