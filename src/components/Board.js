@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Difficulty from "./Difficulty";
 import Confirmation from "./Confirmation";
 import Display from "./Display";
-import Category from "./Category";
 import Score from "./Score";
 
 const Questions = () => {
@@ -13,7 +12,6 @@ const Questions = () => {
   const [response, setResponse] = useState(0);
 
   const [difficulty, setDifficulty] = useState("easy");
-  const [category, setCategory] = useState("9");
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [showScore, setShowScore] = useState(false);
@@ -22,7 +20,7 @@ const Questions = () => {
 
   const [confirm, setConfirm] = useState(null);
 
-  const questionsUrl = `https://opentdb.com/api.php?amount=10&category=${category}&difficulty=${difficulty}&type=boolean`;
+  const questionsUrl = `https://opentdb.com/api.php?amount=10&difficulty=${difficulty}&type=boolean`;
 
   // https://opentdb.com/api.php?amount=10&category=9&difficulty=hard&type=boolean
 
@@ -83,7 +81,6 @@ const Questions = () => {
 
   const quizSelector = (showScore) ?
       <div>
-        <Category setCategory={setCategory} />
       <Difficulty
       setDifficulty={setDifficulty}
       difficulty={difficulty}
@@ -104,6 +101,7 @@ const displayScore = (showScore && score > 0) ?  <Score score={score} totalScore
       handleAnswerOptionClick={handleAnswerOptionClick}
       getNewQuestions={getNewQuestions}
       setShowScore={setShowScore}
+      showScore={showScore}
       currentQuestion={currentQuestion}
       response={response}
       setResponse={setResponse}

@@ -7,6 +7,7 @@ const Display = ({
     setLoading,
     error,
     handleAnswerOptionClick,
+    showScore,
     setShowScore,
     currentQuestion,
     response,
@@ -24,8 +25,8 @@ const Display = ({
      } else if (error) {
       return <p>Error: {error}</p>;
 
-             } else {
-      return (
+             } else {  
+      return ( (showScore) ? <></> : 
         <>
             <div className="question-section">
               <div className="question-count">
